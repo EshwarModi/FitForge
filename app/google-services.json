@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "416535385730",
+    "project_id": "fitforge-daf8a",
+    "storage_bucket": "fitforge-daf8a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416535385730:android:a6bcce4999dfa22985069b",
+        "android_client_info": {
+          "package_name": "com.fitforge.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6ARl5RY4LHcw0S82QSSqkUPz3pt1uXSU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

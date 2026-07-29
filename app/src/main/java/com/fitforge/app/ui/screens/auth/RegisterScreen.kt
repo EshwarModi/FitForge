@@ -13,12 +13,18 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.fitforge.app.viewmodel.AuthViewModel
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun RegisterScreen(
     onLoginClick: () -> Unit
 ) {
 
+    val authViewModel: AuthViewModel = viewModel()
+    val context = LocalContext.current
     var fullName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -109,9 +115,68 @@ fun RegisterScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(55.dp),
-            onClick = { }
+
+            onClick = {
+
+                if (fullName.isBlank() ||
+                    email.isBlank() ||
+                    password.isBlank() ||
+                    confirmPassword.isBlank()
+                ) {
+
+                    Toast.makeText(
+                        context,
+                        "Please fill all fields",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    return@Button
+                }
+
+                if (password != confirmPassword) {
+
+                    Toast.makeText(
+                        context,
+                        "Passwords do not match",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    return@Button
+                }
+
+                authViewModel.register(
+
+                    email = email,
+                    password = password,
+
+                    onSuccess = {
+
+                        Toast.makeText(
+                            context,
+                            "Account Created Successfully",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                    },
+
+                    onFailure = { error ->
+
+                        Toast.makeText(
+                            context,
+                            error,
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                    }
+
+                )
+
+            }
+
         ) {
+
             Text("CREATE ACCOUNT")
+
         }
 
         Spacer(modifier = Modifier.height(20.dp))

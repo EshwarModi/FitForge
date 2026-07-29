@@ -39,6 +39,17 @@ fun AppNavigation() {
 
         }
 
+        composable(Routes.REGISTER) {
+
+            RegisterScreen(
+
+                onLoginClick = {
+                    navController.popBackStack()
+                }
+
+            )
+
+        }
         composable(Routes.FORGOT_PASSWORD) {
 
             ForgotPasswordScreen(
