@@ -52,4 +52,19 @@ class FirebaseAuthManager {
     fun getCurrentUserEmail(): String? {
         return auth.currentUser?.email
     }
+
+    // Send password reset email
+    fun sendPasswordResetEmail(
+        email: String,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        auth.sendPasswordResetEmail(email)
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener {
+                onFailure(it.message ?: "Failed to send reset email")
+            }
+    }
 }

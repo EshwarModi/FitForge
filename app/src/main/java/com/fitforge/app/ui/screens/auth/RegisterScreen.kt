@@ -1,29 +1,31 @@
 package com.fitforge.app.ui.screens.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.fitforge.app.viewmodel.AuthState
 import com.fitforge.app.viewmodel.AuthViewModel
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun RegisterScreen(
-    onLoginClick: () -> Unit
+    onRegisterSuccess: () -> Unit,
+    onLoginClick: () -> Unit,
+    authViewModel: AuthViewModel = viewModel()
 ) {
 
-    val authViewModel: AuthViewModel = viewModel()
     val context = LocalContext.current
     var fullName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -32,6 +34,9 @@ fun RegisterScreen(
 
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
+
+    val authState by authViewModel.authState.collectAsState()
+    val isLoading = authState is AuthState.Loading
 
     Column(
         modifier = Modifier
@@ -91,6 +96,9 @@ fun RegisterScreen(
                     VisualTransformation.None
                 else
                     PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password
+            ),
             singleLine = true
         )
 
@@ -106,6 +114,9 @@ fun RegisterScreen(
                     VisualTransformation.None
                 else
                     PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password
+            ),
             singleLine = true
         )
 
@@ -115,68 +126,58 @@ fun RegisterScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(55.dp),
-
+            enabled = !isLoading,
             onClick = {
+                val trimmedName = fullName.trim()
+                val trimmedEmail = email.trim()
+                val trimmedPassword = password.trim()
+                val trimmedConfirmPassword = confirmPassword.trim()
 
-                if (fullName.isBlank() ||
-                    email.isBlank() ||
-                    password.isBlank() ||
-                    confirmPassword.isBlank()
+                if (trimmedName.isBlank() ||
+                    trimmedEmail.isBlank() ||
+                    trimmedPassword.isBlank() ||
+                    trimmedConfirmPassword.isBlank()
                 ) {
-
-                    Toast.makeText(
-                        context,
-                        "Please fill all fields",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
+                    Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
 
-                if (password != confirmPassword) {
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(trimmedEmail).matches()) {
+                    Toast.makeText(context, "Please enter a valid email address", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
 
-                    Toast.makeText(
-                        context,
-                        "Passwords do not match",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                if (trimmedPassword.length < 6) {
+                    Toast.makeText(context, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
 
+                if (trimmedPassword != trimmedConfirmPassword) {
+                    Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
 
                 authViewModel.register(
-
-                    email = email,
-                    password = password,
-
+                    email = trimmedEmail,
+                    password = trimmedPassword,
                     onSuccess = {
-
-                        Toast.makeText(
-                            context,
-                            "Account Created Successfully",
-                            Toast.LENGTH_LONG
-                        ).show()
-
+                        Toast.makeText(context, "Account Created Successfully!", Toast.LENGTH_LONG).show()
+                        onRegisterSuccess()
                     },
-
-                    onFailure = { error ->
-
-                        Toast.makeText(
-                            context,
-                            error,
-                            Toast.LENGTH_LONG
-                        ).show()
-
+                    onFailure = { errorMsg ->
+                        Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
                     }
-
                 )
-
             }
-
         ) {
-
-            Text("CREATE ACCOUNT")
-
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.size(24.dp)
+                )
+            } else {
+                Text("CREATE ACCOUNT")
+            }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
