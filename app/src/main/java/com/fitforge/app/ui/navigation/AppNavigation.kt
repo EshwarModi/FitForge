@@ -7,7 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fitforge.app.ui.screens.auth.ForgotPasswordScreen
 import com.fitforge.app.ui.screens.auth.LoginScreen
 import com.fitforge.app.ui.screens.auth.RegisterScreen
-import com.fitforge.app.ui.screens.home.HomeScreen
+import com.fitforge.app.ui.screens.main.MainScreen
 import com.fitforge.app.ui.screens.splash.SplashScreen
 
 @Composable
@@ -62,7 +62,7 @@ fun AppNavigation() {
         }
 
         composable(Routes.HOME) {
-            HomeScreen(
+            MainScreen(
                 onLogoutClick = {
                     navController.navigate(Routes.LOGIN) {
                         popUpTo(Routes.HOME) { inclusive = true }
