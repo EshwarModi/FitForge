@@ -21,7 +21,7 @@ sealed class BottomNavItem(
     object Home : BottomNavItem("tab_home", "Home", Icons.Default.Home)
     object Workout : BottomNavItem("tab_workout", "Workout", Icons.Default.FitnessCenter)
     object Nutrition : BottomNavItem("tab_nutrition", "Nutrition", Icons.Default.Restaurant)
-    object Progress : BottomNavItem("tab_progress", "Progress", Icons.AutoMirrored.Filled.ShowChart)
+    object Progress : BottomNavItem("tab_progress", "Progress", Icons.Default.ShowChart)
     object Profile : BottomNavItem("tab_profile", "Profile", Icons.Default.Person)
 }
 

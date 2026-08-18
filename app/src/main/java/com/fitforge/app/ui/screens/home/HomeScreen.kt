@@ -201,7 +201,7 @@ fun HomeScreen(
                     title = "Steps",
                     value = String.format("%,d", metrics.stepsCount),
                     unit = " / 10k steps",
-                    icon = Icons.AutoMirrored.Filled.DirectionsWalk,
+                    icon = Icons.Default.DirectionsWalk,
                     progress = (metrics.stepsCount.toFloat() / metrics.stepsTarget).coerceIn(0f, 1f),
                     color = MaterialTheme.colorScheme.secondaryContainer
                 )

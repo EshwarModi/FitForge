@@ -35,7 +35,7 @@ fun ProfileScreen(
                             onLogoutClick()
                         }
                     ) {
-                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Logout")
+                        Icon(Icons.Default.ExitToApp, contentDescription = "Logout")
                     }
                 }
             )
@@ -89,7 +89,7 @@ fun ProfileScreen(
                     contentColor = MaterialTheme.colorScheme.error
                 )
             ) {
-                Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = null)
+                Icon(Icons.Default.ExitToApp, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Logout of FitForge")
             }
